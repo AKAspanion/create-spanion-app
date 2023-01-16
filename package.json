@@ -1,6 +1,6 @@
 {
   "name": "create-spanion-app",
-  "version": "0.0.1",
+  "version": "0.0.1-dev",
   "type": "module",
   "description": "Generate template from CLI.",
   "main": "index.js",
