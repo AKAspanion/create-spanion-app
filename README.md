@@ -1,2 +1,3 @@
-# templates
-Generate template from CLI.
+# create-spanion-app
+
+Generate starter template from repos using CLI.

@@ -1,52 +1,149 @@
 #!/usr/bin/env node
 
 import { execSync } from "child_process";
+import prompts from "prompts";
 import path from "path";
 import fs from "fs";
-import { blue } from "kolorist";
+import minimist from "minimist";
+import { blue, green, red, reset } from "kolorist";
 
-if (process.argv.length < 3) {
-  blue("You have to provide a name to your app.");
-  blue("For example :");
-  blue("    npx create-my-boilerplate my-app");
-  process.exit(1);
+import repos from "./repos";
+
+const argv = minimist(process.argv.slice(2));
+
+const defaultProjectName = "my-app";
+const CWD = process.cwd();
+
+const argProjectName = argv._[0];
+const argTemplateKey = argv.template || argv.t;
+const argRepoLink = argv.repo || argv.r;
+
+function getTemplate(templateKey: string) {
+  if (repos[templateKey]) {
+    return repos[templateKey];
+  } else {
+    throw new Error("Given template key is invalid.");
+  }
 }
 
-const projectName = process.argv[2];
-const currentPath = process.cwd();
-const projectPath = path.join(currentPath, projectName);
-const git_repo = `https://github.com/AKAspanion/mfe-react-template`;
-
-try {
-  fs.mkdirSync(projectPath);
-} catch (err) {
-  if (err.code === "EEXIST") {
-    console.log(
-      `The file ${projectName} already exist in the current directory, please give it another name.`
-    );
-  } else {
-    console.log(err);
+function getGitRepo() {
+  if (argTemplateKey) {
+    return getTemplate(argTemplateKey);
   }
-  process.exit(1);
+
+  if (argRepoLink) {
+    return argRepoLink;
+  }
+
+  throw new Error("Template key or repo link is required.");
+}
+
+function isEmpty(path: string) {
+  const files = fs.readdirSync(path);
+  return files.length === 0 || (files.length === 1 && files[0] === ".git");
+}
+
+function isValidPackageName(projectName: string) {
+  return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
+    projectName
+  );
+}
+
+function writeFile(targetPath: string, content: string) {
+  fs.writeFileSync(targetPath, content);
 }
 
 async function main() {
+  let targetProjectName: string = argProjectName || defaultProjectName || "";
+
+  const resolvedProjectName = () =>
+    targetProjectName === "."
+      ? path.basename(path.resolve())
+      : targetProjectName;
+
   try {
-    console.log("Downloading files...");
-    execSync(`git clone --depth 1 ${git_repo} ${projectPath}`);
+    await prompts(
+      [
+        {
+          type: argProjectName ? null : "text",
+          name: "projectName",
+          message: reset("Project name:"),
+          initial: defaultProjectName,
+          onState: (state) => {
+            targetProjectName = state.value.trim() || defaultProjectName;
+          },
+        },
+      ],
+      {
+        onCancel: () => {
+          throw new Error(red("✖") + " Process cancelled");
+        },
+      }
+    );
+
+    const gitRepo = getGitRepo();
+    const projectPath = path.join(CWD, resolvedProjectName());
+
+    if (!isValidPackageName(resolvedProjectName())) {
+      throw new Error(
+        `Given project name "${resolvedProjectName()}" doesn't match package.json naming convention.`
+      );
+    }
+
+    if (!fs.existsSync(targetProjectName)) {
+      fs.mkdirSync(projectPath, { recursive: true });
+    }
+
+    if (!isEmpty(targetProjectName)) {
+      console.log(
+        red(
+          (targetProjectName === "."
+            ? "Current directory"
+            : `Target directory "${targetProjectName}"`) + ` is not empty.`
+        )
+      );
+      process.exit(1);
+    }
+
+    console.log(blue("Copying files..."));
+    execSync(`git clone --depth 1 ${gitRepo} ${projectPath}`);
 
     process.chdir(projectPath);
 
-    // console.log("Installing dependencies...");
-    // execSync("npm install");
+    console.log(blue("Parsing files..."));
+    const pkgJsonPath = path.join(projectPath, `package.json`);
+    const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
+    pkgJson.name = targetProjectName;
+    writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
-    console.log("Removing useless files");
+    console.log(blue("Performing cleanup..."));
     execSync("npx rimraf ./.git");
-    fs.rmdirSync(path.join(projectPath, "bin"), { recursive: true });
+    execSync("npx rimraf yarn.lock");
+    execSync("npx rimraf package-lock.json");
 
-    console.log("The installation is done, this is ready to use !");
+    fs.rm(path.join(projectPath, "bin"), { recursive: true }, (err) => {
+      // console.log(err);
+    });
+
+    console.log(
+      green(`The installation is done in "${resolvedProjectName()}" directory!`)
+    );
+
+    const endResult = await prompts([
+      {
+        type: "confirm",
+        name: "openInVscode",
+        message: reset("Open in VS Code"),
+      },
+    ]);
+
+    const { openInVscode } = endResult;
+
+    if (openInVscode) {
+      execSync(`code ${projectPath}`);
+    }
   } catch (error) {
-    console.log(error);
+    console.log(red(error.message));
   }
 }
 main();
