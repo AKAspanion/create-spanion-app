@@ -1,0 +1,37 @@
+{
+  "name": "create-spanion-app",
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Generate template from CLI.",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "prepublish": "yarn build"
+  },
+  "bin": {
+    "create-spanion-app": "index.js",
+    "csa": "index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AKAspanion/templates.git"
+  },
+  "keywords": [],
+  "author": "Ankit Kumar pandit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AKAspanion/templates/issues"
+  },
+  "homepage": "https://github.com/AKAspanion/templates#readme",
+  "devDependencies": {
+    "unbuild": "^1.1.1"
+  },
+  "dependencies": {
+    "kolorist": "^1.6.0",
+    "rimraf": "^4.0.7"
+  }
+}
