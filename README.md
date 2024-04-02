@@ -37,3 +37,7 @@ To use specified project folder.
 - backend
 - svelte
 - nextjs
+
+## License
+
+MIT © [AKAspanion](https://github.com/AKAspanion)

@@ -1,6 +1,6 @@
 {
   "name": "create-spanion-app",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "description": "Generate starter template from repos using CLI.",
   "main": "index.js",
