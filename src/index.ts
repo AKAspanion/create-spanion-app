@@ -117,16 +117,16 @@ async function main() {
     writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
     console.log(blue("Performing cleanup..."));
-    execSync("npx rimraf ./.git");
-    execSync("npx rimraf yarn.lock");
-    execSync("npx rimraf package-lock.json");
+    execSync(`npx rimraf ${path.join(projectPath, ".git")}`);
+    execSync(`npx rimraf ${path.join(projectPath, "yarn.lock")}`);
+    execSync(`npx rimraf ${path.join(projectPath, "package-lock.json")}`);
 
     fs.rm(path.join(projectPath, "bin"), { recursive: true }, (err) => {
       // console.log(err);
     });
 
     console.log(
-      green(`The installation is done in "${resolvedProjectName()}" directory!`)
+      green(`The setup is done in "${resolvedProjectName()}" directory!`)
     );
 
     const endResult = await prompts([
