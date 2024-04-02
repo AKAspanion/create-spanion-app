@@ -1,4 +1,5 @@
-# create-spanion-app [![Publish](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml/badge.svg)](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml)
+# create-spanion-app [![Publish](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml/badge.svg)](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml) ![NPM Version](https://img.shields.io/npm/v/create-spanion-app)
+
 
 Generate projects from repos using CLI.  
 
