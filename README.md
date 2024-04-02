@@ -1,4 +1,4 @@
-# create-spanion-app
+# create-spanion-app [![Publish](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml/badge.svg)](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml)
 
 Generate projects from repos using CLI.  
 
