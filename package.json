@@ -1,6 +1,6 @@
 {
   "name": "create-spanion-app",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "type": "module",
   "description": "Generate starter template from repos using CLI.",
   "main": "index.js",
@@ -36,13 +36,14 @@
   },
   "homepage": "https://github.com/AKAspanion/templates#readme",
   "devDependencies": {
-    "@types/prompts": "^2.4.2",
-    "unbuild": "^1.1.1"
+    "@types/prompts": "^2.4.9",
+    "typescript": "^5.4.3",
+    "unbuild": "^2.0.0"
   },
   "dependencies": {
-    "kolorist": "^1.6.0",
-    "minimist": "^1.2.7",
+    "kolorist": "^1.8.0",
+    "minimist": "^1.2.8",
     "prompts": "^2.4.2",
-    "rimraf": "^4.0.7"
+    "rimraf": "^5.0.5"
   }
 }
