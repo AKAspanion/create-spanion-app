@@ -1,6 +1,6 @@
 {
   "name": "create-spanion-app",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "description": "Generate starter template from repos using CLI.",
   "main": "index.js",
@@ -43,7 +43,6 @@
   "dependencies": {
     "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
-    "prompts": "^2.4.2",
-    "rimraf": "^5.0.5"
+    "prompts": "^2.4.2"
   }
 }

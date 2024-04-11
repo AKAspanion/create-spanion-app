@@ -14,9 +14,10 @@ const argv = minimist(process.argv.slice(2));
 const defaultProjectName = "my-app";
 const CWD = process.cwd();
 
-const argProjectName = argv._[0];
+const commandArg = argv._[0];
 const argTemplateKey = argv.template || argv.t;
 const argRepoLink = argv.repo || argv.r;
+const argRepoHelp = argv.help || argv.h;
 
 function getTemplate(templateKey: string) {
   if (repos[templateKey]) {
@@ -24,6 +25,35 @@ function getTemplate(templateKey: string) {
   } else {
     throw new Error("Given template key is invalid.");
   }
+}
+
+function showHelp() {
+  if (commandArg === "help") {
+    if (argRepoHelp) {
+      console.log("Flag to show help");
+      return;
+    }
+    if (argTemplateKey) {
+      console.log("Name of the template");
+      return;
+    }
+    if (argRepoLink) {
+      console.log("link of the repository");
+      return;
+    }
+  }
+
+  console.log(`Usage: [options] [value]
+
+Options:
+  -h, --help          display help for command
+  -t, --template      template name to install
+  -r, --repo          repo link to install from
+  
+Commands:
+  help  [options]     display help for options
+  [arg] [options]     first command is used as repo folder
+`);
 }
 
 function getGitRepo() {
@@ -54,7 +84,11 @@ function writeFile(targetPath: string, content: string) {
 }
 
 async function main() {
-  let targetProjectName: string = argProjectName || defaultProjectName || "";
+  if (argRepoHelp || commandArg === "help") {
+    return showHelp();
+  }
+
+  let targetProjectName: string = commandArg || defaultProjectName || "";
 
   const resolvedProjectName = () =>
     targetProjectName === "."
@@ -65,7 +99,7 @@ async function main() {
     await prompts(
       [
         {
-          type: argProjectName ? null : "text",
+          type: commandArg ? null : "text",
           name: "projectName",
           message: reset("Project name:"),
           initial: defaultProjectName,
@@ -146,4 +180,5 @@ async function main() {
     console.log(red(error.message));
   }
 }
+
 main();
