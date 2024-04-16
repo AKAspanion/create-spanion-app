@@ -151,9 +151,9 @@ async function main() {
     writeFile(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
     console.log(blue("Performing cleanup..."));
-    execSync(`npx rimraf ${path.join(projectPath, ".git")}`);
-    execSync(`npx rimraf ${path.join(projectPath, "yarn.lock")}`);
-    execSync(`npx rimraf ${path.join(projectPath, "package-lock.json")}`);
+    execSync(`rm -rf ${path.join(projectPath, ".git")}`);
+    execSync(`rm -rf ${path.join(projectPath, "yarn.lock")}`);
+    execSync(`rm -rf ${path.join(projectPath, "package-lock.json")}`);
 
     fs.rm(path.join(projectPath, "bin"), { recursive: true }, (err) => {
       // console.log(err);

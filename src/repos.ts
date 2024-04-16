@@ -1,4 +1,5 @@
 export default {
+  monorepo: "https://github.com/AKAspanion/monorepo-template",
   "mfe-react": "https://github.com/AKAspanion/mfe-react-template",
   tanstack: "https://github.com/AKAspanion/tanstack-template",
   frontend: "https://github.com/AKAspanion/frontend-template",
