@@ -42,11 +42,6 @@ export async function scanLongFiles({
       stream.on("data", (buf: Buffer) => {
         for (let i = 0; i < buf.length; ++i) {
           if (buf[i] === 10) lines++;
-          if (lines > lineThreshold) {
-            stream.destroy();
-            resolve(lines);
-            return;
-          }
         }
       });
       stream.on("end", () => resolve(lines));
