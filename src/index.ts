@@ -10,7 +10,9 @@ import { blue, green, red, reset } from "kolorist";
 import repos from "./repos";
 
 // Import image scanner functionality
-import { scanImages } from "./image-scanner";
+import { scanImages } from "./scanners/imgs-scanner";
+// Import long files scanner
+import { scanLongFiles } from "./scanners/long-files-scanner";
 
 const argv = minimist(process.argv.slice(2));
 
@@ -55,7 +57,8 @@ Options:
   
 Commands:
   help  [options]     display help for options
-  scan-images         scan for image tags in Vue/HTML/JS/TS files
+  scan-imgs           scan for image tags in Vue/HTML/JS/TS files
+  scan-long-files     scan for files exceeding a specified number of lines
   [arg] [options]     first command is used as repo folder
 
 Image Scanner Options:
@@ -63,6 +66,10 @@ Image Scanner Options:
   --csv               Generate CSV file
   --no-json          Don't generate JSON files
   --no-preview       Don't show image preview
+
+Long Files Scanner Options:
+  --threshold <number>  Line count threshold (default: 500)
+  --dir <directory>     Root directory to scan (default: current directory)
 `);
 }
 
@@ -99,7 +106,7 @@ async function main() {
   }
 
   // Handle image scanner command
-  if (commandArg === "scan-images") {
+  if (commandArg === "scan-imgs") {
     console.log(blue("🔍 Starting image tag scanner...\n"));
 
     const scanOptions = {
@@ -114,6 +121,22 @@ async function main() {
       scanImages(scanOptions);
     } catch (error) {
       console.log(red(`Error scanning images: ${error.message}`));
+    }
+    return;
+  }
+
+  // Handle long files scanner command
+  if (commandArg === "scan-long-files") {
+    console.log(blue("📏 Scanning for long files...\n"));
+    const threshold = argv.threshold || argv.t || 500;
+    const dir = argv.dir || argv.d || ".";
+    try {
+      await scanLongFiles({
+        lineThreshold: parseInt(threshold, 10),
+        rootDir: dir,
+      });
+    } catch (error) {
+      console.log(red(`Error scanning long files: ${error.message}`));
     }
     return;
   }

@@ -33,7 +33,7 @@ Specifies to use any public repo.
 
 Scan for image tags in Vue.js, HTML, JavaScript, and TypeScript files to analyze performance and accessibility.
 
-`npx csa scan-images [options]`
+`npx csa scan-imgs [options]`
 
 **Options:**
 
@@ -45,11 +45,31 @@ Scan for image tags in Vue.js, HTML, JavaScript, and TypeScript files to analyze
 **Examples:**
 
 ```bash
-npx csa scan-images                    # Comprehensive scan with JSON output
-npx csa scan-images --mode simple     # Simple scan with basic output
-npx csa scan-images --mode summary    # Summary report with recommendations
-npx csa scan-images --csv             # Generate CSV file
-npx csa scan-images --no-preview      # Skip preview display
+npx csa scan-imgs                    # Comprehensive scan with JSON output
+npx csa scan-imgs --mode simple     # Simple scan with basic output
+npx csa scan-imgs --mode summary    # Summary report with recommendations
+npx csa scan-imgs --csv             # Generate CSV file
+npx csa scan-imgs --no-preview      # Skip preview display
+```
+
+#### Long Files Scanner
+
+Scan for files exceeding a specified number of lines (default: 500). Useful for identifying large files in your project.
+
+`npx csa scan-long-files [options]`
+
+**Options:**
+
+- `--threshold <number>` - Line count threshold (default: 500)
+- `--dir <directory>` - Root directory to scan (default: current directory)
+
+**Examples:**
+
+```bash
+npx csa scan-long-files                    # Scan for files >500 lines in current directory
+npx csa scan-long-files --threshold 1000   # Scan for files >1000 lines
+npx csa scan-long-files --dir src          # Scan only in the src directory
+npx csa scan-long-files --threshold 200 --dir .  # Custom threshold and directory
 ```
 
 ## Other Examples
