@@ -1,6 +1,5 @@
 # create-spanion-app [![Publish](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml/badge.svg)](https://github.com/AKAspanion/create-spanion-app/actions/workflows/publish.yml) ![NPM Version](https://img.shields.io/npm/v/create-spanion-app)
 
-
 Generate projects from repos using CLI.  
 
 Using this simple cli tool, you can copy any public repo and use it as a template for your project.  
@@ -13,18 +12,48 @@ It can also be used without installation `npx create-spanion-app <commands>`.
 
 > The shorthand `csa` can be substituted for `create-spanion-app` for e.g.  is `npx csa -t tanstack`.
 
-This tool takes these two arguments: 
+### Commands
 
-##### Template *`-t`* 
+#### Template Creation
+
+This tool takes these two arguments:
+
+##### Template *`-t`*
+
 Specifies to use the inbuilt template.  
 `npx csa -t frontend`  
 `npx csa -t svelte`  
 
 ##### Repo *`-r`*
+
 Specifies to use any public repo.  
 `npx csa -r https://github.com/AKAspanion/nextjs-template.git`
 
+#### Image Scanner
+
+Scan for image tags in Vue.js, HTML, JavaScript, and TypeScript files to analyze performance and accessibility.
+
+`npx csa scan-images [options]`
+
+**Options:**
+
+- `--mode <mode>` - Scan mode: `simple`, `comprehensive`, `summary` (default: comprehensive)
+- `--csv` - Generate CSV file
+- `--no-json` - Don't generate JSON files  
+- `--no-preview` - Don't show image preview
+
+**Examples:**
+
+```bash
+npx csa scan-images                    # Comprehensive scan with JSON output
+npx csa scan-images --mode simple     # Simple scan with basic output
+npx csa scan-images --mode summary    # Summary report with recommendations
+npx csa scan-images --csv             # Generate CSV file
+npx csa scan-images --no-preview      # Skip preview display
+```
+
 ## Other Examples
+
 To use current folder.  
 `npx csa . -t frontend`  
 
@@ -32,6 +61,7 @@ To use specified project folder.
 `npx csa my-app -t frontend`
 
 ## Available Templates
+
 - mfe-react
 - tanstack
 - frontend

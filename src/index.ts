@@ -9,6 +9,9 @@ import { blue, green, red, reset } from "kolorist";
 
 import repos from "./repos";
 
+// Import image scanner functionality
+import { scanImages } from "./image-scanner";
+
 const argv = minimist(process.argv.slice(2));
 
 const defaultProjectName = "my-app";
@@ -52,7 +55,14 @@ Options:
   
 Commands:
   help  [options]     display help for options
+  scan-images         scan for image tags in Vue/HTML/JS/TS files
   [arg] [options]     first command is used as repo folder
+
+Image Scanner Options:
+  --mode <mode>       Scan mode: simple, comprehensive, summary (default: comprehensive)
+  --csv               Generate CSV file
+  --no-json          Don't generate JSON files
+  --no-preview       Don't show image preview
 `);
 }
 
@@ -86,6 +96,26 @@ function writeFile(targetPath: string, content: string) {
 async function main() {
   if (argRepoHelp || commandArg === "help") {
     return showHelp();
+  }
+
+  // Handle image scanner command
+  if (commandArg === "scan-images") {
+    console.log(blue("🔍 Starting image tag scanner...\n"));
+
+    const scanOptions = {
+      mode: argv.mode || "comprehensive",
+      generateCSV: argv.csv || false,
+      generateJSON: !argv["no-json"],
+      showPreview: !argv["no-preview"],
+      maxPreview: 10,
+    };
+
+    try {
+      scanImages(scanOptions);
+    } catch (error) {
+      console.log(red(`Error scanning images: ${error.message}`));
+    }
+    return;
   }
 
   let targetProjectName: string = commandArg || defaultProjectName || "";
