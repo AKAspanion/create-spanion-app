@@ -13,6 +13,8 @@ import repos from "./repos";
 import { scanImages } from "./scanners/imgs-scanner";
 // Import long files scanner
 import { scanLongFiles } from "./scanners/long-files-scanner";
+// Import build benchmark functionality
+import { runBuildBenchmark } from "./build/benchmark-build";
 
 const argv = minimist(process.argv.slice(2));
 
@@ -59,6 +61,7 @@ Commands:
   help  [options]     display help for options
   scan-imgs           scan for image tags in Vue/HTML/JS/TS files
   scan-long-files     scan for files exceeding a specified number of lines
+  benchmark-build     run build performance benchmark
   [arg] [options]     first command is used as repo folder
 
 Image Scanner Options:
@@ -70,6 +73,10 @@ Image Scanner Options:
 Long Files Scanner Options:
   --threshold <number>  Line count threshold (default: 500)
   --dir <directory>     Root directory to scan (default: current directory)
+
+Build Benchmark Options:
+  --count <number>      Number of builds to run (default: 10)
+  --command <string>    Build command to run (default: npm run build)
 `);
 }
 
@@ -137,6 +144,22 @@ async function main() {
       });
     } catch (error) {
       console.log(red(`Error scanning long files: ${error.message}`));
+    }
+    return;
+  }
+
+  // Handle build benchmark command
+  if (commandArg === "benchmark-build") {
+    console.log(blue("🚀 Starting build benchmark...\n"));
+    const count = argv.count || argv.c || 10;
+    const command = argv.command || "npm run build";
+    try {
+      await runBuildBenchmark({
+        count: parseInt(count, 10),
+        command: command,
+      });
+    } catch (error) {
+      console.log(red(`Error running build benchmark: ${error.message}`));
     }
     return;
   }
